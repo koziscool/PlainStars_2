@@ -17,8 +17,28 @@ class Button extends React.Component {
   }
 };
 
+const Result = (props) => {
+  return (
+    <div> ... </div>
+    );
+};
+
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <Button />  
+        <Result />  
+      </div>
+    );
+  }
+};
+
+
+
+
 ReactDOM.render(
-  <Button />,
+  <App />,
   document.getElementById( 'root' )
 );
 
