@@ -12,9 +12,22 @@ const Card = (props) => {
   );
 }
 
+const CardList = (props) => {
+  return(
+    <div>
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+    </div>
+  );  
+}
+
+
 
 ReactDOM.render(
-  <Card />,
+  <CardList />,
   document.getElementById('root')
 );
 
