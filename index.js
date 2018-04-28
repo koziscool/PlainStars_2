@@ -12,15 +12,6 @@ const Card = (props) => {
   );
 }
 
-
-let data=[
-  {
-    name: "John Kosmicke",
-    company: "tetris",
-    avatar_url: "https://avatars1.githubusercontent.com/u/1393010?v=4",
-  },
-]
-
 const CardList = (props) => {
   return(
     <div>
@@ -30,10 +21,37 @@ const CardList = (props) => {
 }
 
 class Form extends React.Component {
+
+  state = { userName: '' };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    console.log( this.state.userName );
+
+    const  theUrl = "https://api.github.com/users/" + this.state.userName;
+    let http = new XMLHttpRequest();
+
+    http.onreadystatechange = () => {
+      if( http.readyState === 4 && http.status === 200 ){
+        console.log( http.responseText );
+        // this.props.onSubmit( http.responseText );
+        // this.setState({ userName: '' })
+      }
+    };
+
+    http.open( "GET", theUrl, true ); 
+    http.send( null );
+
+  };
+
   render() {
     return(
-      <form>
-        <input type="text" placeholder="Github username" />
+      <form onSubmit={ this.handleSubmit }>
+        <input type="text" 
+                  placeholder="Github username" 
+                  value={ this.state.userName }
+                  onChange={ (e) => this.setState({ userName: e.target.value }) }
+                  required />
         <button type="submit">Add card</button>
       </form>
     );  
@@ -42,11 +60,22 @@ class Form extends React.Component {
 
 
 class App extends React.Component {
+
+  state = {
+    cards: [
+      {
+        name: "John Kosmicke",
+        company: "tetris",
+        avatar_url: "https://avatars1.githubusercontent.com/u/1393010?v=4",
+      },
+    ],
+  };
+
   render() {
     return(
       <div>
         <Form />
-        <CardList cards={ data }/>
+        <CardList cards={ this.state.cards }/>
       </div>
     );  
   }
