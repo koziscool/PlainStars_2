@@ -33,7 +33,8 @@ class Form extends React.Component {
 
     http.onreadystatechange = () => {
       if( http.readyState === 4 && http.status === 200 ){
-        console.log( http.responseText );
+        this.props.onSubmit( http.responseText );
+        // console.log( http.responseText );
         // this.props.onSubmit( http.responseText );
         // this.setState({ userName: '' })
       }
@@ -41,7 +42,6 @@ class Form extends React.Component {
 
     http.open( "GET", theUrl, true ); 
     http.send( null );
-
   };
 
   render() {
@@ -71,10 +71,14 @@ class App extends React.Component {
     ],
   };
 
+  addNewCard = (cardInfo) => {
+    console.log( cardInfo );
+  }
+
   render() {
     return(
       <div>
-        <Form />
+        <Form onSubmit={ this.addNewCard } />
         <CardList cards={ this.state.cards }/>
       </div>
     );  
