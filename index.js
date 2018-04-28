@@ -15,7 +15,7 @@ const Card = (props) => {
 const CardList = (props) => {
   return(
     <div>
-      { props.cards.map( card => <Card  {...card} /> ) }
+      { props.cards.map( card => <Card  key={card.id} { ...card } /> ) }
     </div>
   );  
 }
@@ -26,17 +26,13 @@ class Form extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log( this.state.userName );
 
     const  theUrl = "https://api.github.com/users/" + this.state.userName;
     let http = new XMLHttpRequest();
-
     http.onreadystatechange = () => {
       if( http.readyState === 4 && http.status === 200 ){
-        this.props.onSubmit( http.responseText );
-        // console.log( http.responseText );
-        // this.props.onSubmit( http.responseText );
-        // this.setState({ userName: '' })
+        this.props.onSubmit( JSON.parse( http.responseText ));
+        this.setState( { userName: ''} )
       }
     };
 
@@ -60,19 +56,12 @@ class Form extends React.Component {
 
 
 class App extends React.Component {
-
-  state = {
-    cards: [
-      {
-        name: "John Kosmicke",
-        company: "tetris",
-        avatar_url: "https://avatars1.githubusercontent.com/u/1393010?v=4",
-      },
-    ],
-  };
+  state = { cards: [] };
 
   addNewCard = (cardInfo) => {
-    console.log( cardInfo );
+    this.setState( prevState => ({
+      cards: prevState.cards.concat( cardInfo )
+    }));
   }
 
   render() {
@@ -84,7 +73,6 @@ class App extends React.Component {
     );  
   }
 }
-
 
 ReactDOM.render(
   <App />,
