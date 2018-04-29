@@ -85,6 +85,17 @@ const Numbers = (props) => {
   );  
 };
 
+const DoneFrame = (props) => {
+  return(
+    <div className="text-center">
+        <h2>
+          {props.doneStatus}
+        </h2>
+    </div>
+  );  
+};
+
+
 class Game extends React.Component {
 
   static randomNumber = () => 1 + Math.floor( Math.random() * 9);
@@ -95,6 +106,7 @@ class Game extends React.Component {
     answerIsCorrect: null,
     usedNumbers: [ ],
     remainingRedraws: 5,
+    doneStatus: null,
   };
 
   selectNumber = (clickedNumber) => {
@@ -140,7 +152,7 @@ class Game extends React.Component {
 
 
   render() {
-    const { selectedNumbers, numberOfStars, remainingRedraws,
+    const { selectedNumbers, numberOfStars, remainingRedraws, doneStatus,
           answerIsCorrect, usedNumbers } = this.state;
     return(
       <div className="container">
@@ -158,9 +170,12 @@ class Game extends React.Component {
                         unselectNumber = { this.unselectNumber }/>
         </div>
         <br />
-        <Numbers selectedNumbers= { selectedNumbers }
-                         usedNumbers= { usedNumbers }
-                        selectNumber = { this.selectNumber } />
+        { doneStatus ? 
+          <DoneFrame doneStatus={ doneStatus } /> :
+          <Numbers selectedNumbers= { selectedNumbers }
+                           usedNumbers= { usedNumbers }
+                          selectNumber = { this.selectNumber } />
+        }
       </div>
     );  
   }
