@@ -16,9 +16,33 @@ const Stars = (props) => {
 };
 
 const Button = (props) => {
+  let button;
+  switch( props.answerIsCorrect ){
+    case true:
+      button = 
+        <button className="btn btn-success" >
+          <i className="fa fa-check"></i>
+        </button>
+      break;
+    case false:
+      button = 
+        <button className="btn btn-danger" >
+          <i className="fa fa-times"></i>
+        </button>
+      break;
+    default:
+      button = 
+        <button className="btn"
+                      disabled={ props.selectedNumbers.length === 0 }
+                      onClick={ props.checkAnswer } >
+          =
+        </button>
+      break;
+  }
+
   return(
     <div className="col-2">
-      <button>=</button>
+      { button }
     </div>
   );  
 };
@@ -59,6 +83,7 @@ class Game extends React.Component {
   state = {
     numberOfStars: 1 + Math.floor( Math.random() * 9),
     selectedNumbers: [  ],
+    answerIsCorrect: null,
   };
 
   selectNumber = (clickedNumber) => {
@@ -74,19 +99,29 @@ class Game extends React.Component {
     }));
   };
 
+  checkAnswer =  () => {
+    this.setState( prevState => ({
+      answerIsCorrect: prevState.numberOfStars === 
+          prevState.selectedNumbers.reduce( (total, elt) => total + elt, 0),
+    }));
+  };
+
   render() {
+    const { selectedNumbers, numberOfStars, answerIsCorrect } = this.state;
     return(
       <div className="container">
         <h3>Play Nine</h3>
         <hr />
         <div className="row">
-          <Stars numberOfStars={ this.state.numberOfStars }/>
-          <Button />
-          <Answer selectedNumbers= { this.state.selectedNumbers } 
+          <Stars numberOfStars={ numberOfStars }/>
+          <Button selectedNumbers= { selectedNumbers } 
+                        checkAnswer={ this.checkAnswer }
+                        answerIsCorrect={ answerIsCorrect } />
+          <Answer selectedNumbers= { selectedNumbers } 
                         unselectNumber = { this.unselectNumber }/>
         </div>
         <br />
-        <Numbers selectedNumbers= { this.state.selectedNumbers }
+        <Numbers selectedNumbers= { selectedNumbers }
                         selectNumber = { this.selectNumber } />
       </div>
     );  
